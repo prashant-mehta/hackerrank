@@ -14,7 +14,7 @@ int main() {
     int T, N;
     
     vector<long int> storage[2];
-    
+    vector<int> counter[2];
     vector<long int> input;
     
     cin >> T;
@@ -28,6 +28,10 @@ int main() {
         input.clear();
         storage[0].clear();
         storage[1].clear();
+        
+        counter[0].clear();
+        counter[1].clear();        
+        
         long int temp;
    
         long int result = 0;
@@ -50,10 +54,19 @@ int main() {
             storage[0].push_back(temp);
             result += temp;
         }
+        storage[0].pop_back();
 
+
+
+		for (int i = N-1; i > 0; i--) {
+			counter[0].push_back(i);
+		}
 
         int read ;
         int write;
+        
+        
+        
         
         for (int i = 0; i < N-1; i++) {
         // For all length of inputs
@@ -62,32 +75,30 @@ int main() {
             read = i & 1;
             write = (i+1) & 1;
 			storage[write].clear();
+			counter[write].clear();
             
-            int kInc = 1;
-            int kStart = i + kInc;
+			int curr_read_size = storage[read].size();
            /*cout << "i is " << i << endl;
                         cout << "read is " << read << endl; 
 	cout << "read size is " << storage[read].size() << endl;
          */
-            for (int j = 0; j < storage[read].size() - 1 ; j++) {
-            
-      //                  cout << "j is " << j << endl;
-            // For elements in read storage array
-				if (kStart >= N) {
-					kInc++;
-					kStart = i + kInc;
-//					continue;
-				}
-
-				for (int k = kStart; k < N ; k++) {
-	//			            cout << "k is " << k << endl;
+            for (int j = 0; j <= curr_read_size - 1 ; j++) {
+            	
+            	
+            	for ( int k = N-counter[read].at(j); k < N; k++ ) {
 					long int temp2 = storage[read].at(j) ^ input[k];
-					if (k!=N-1)
-						storage[write].push_back(temp2);
+					
+			//		cout << i << "\t" << j << "\t" << N-1-k << endl;
 					result += temp2;
-				}
-				kStart++;
-            
+            		if (k != N-1) {
+						storage[write].push_back(temp2);
+			//			cout << "Pushing" << N-1-k  << endl;
+						counter[write].push_back(N-1-k);
+            		}
+            	
+            	}
+            	
+				            
             
             }
             
